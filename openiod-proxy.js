@@ -156,8 +156,16 @@ var _service;
 var initRoutes = function(){
 	app.all('/*', function(req, res, next) {
 		console.log("app.all/: " + req.url + " ; systemCode: " + openIoDConfig.getSystemCode() );
+//    console.dir(req)
 		//  res.header("Access-Control-Allow-Origin", "*");
 		//  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    console.log('Headers:')
+    console.dir(req.headers)
+    console.log('Body:')
+    console.dir(req.body)
+    console.dir(req.params)
+    console.dir(req.query)
+
 		next();
 	});
 
