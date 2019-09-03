@@ -1,0 +1,63 @@
+{
+  "system": {
+    "systemName": "openiod-proxy",
+    "systemCode": "SCAPE604",
+    "systemListenPort": "5000",
+    "serviceType": "openiod-proxy",
+    "versionStr": "",
+    "version": {
+      "l1": 0,
+      "l2": 0,
+      "l3": 1
+    }
+  },
+  "service": {
+    "default": {
+      "procedure": {
+        "name": "default proxy",
+        "module": "openiod-proxy-test"
+      },
+      "source": {
+        "name": "Orion Notifications",
+        "controller": "openiod-proxy-controller-test",
+        "info": "https://fiware.org",
+        "idMap": {
+          "id": "id",
+          "entityTime": "time"
+        },
+        "attributeMap": [
+          {
+            "targetType": "AirQualityObserved",
+            "targetIdPrefix": "",
+            "attributes": {
+              "id": "sensorId",
+              "time": "dateObserved",
+              "s_barometer": "airPressure",
+              "s_temperatureambient": "temperature",
+              "s_co2": "CO2",
+              "s_latitude": "location",
+              "s_longitude": "location",
+              "s_no2": "NO2",
+              "s_pm1": "PM1",
+              "s_pm10": "PM10",
+              "s_pm2_5": "PM25",
+              "s_rain": "rain",
+              "s_humidity": "relativeHumidity",
+              "s_temperatureunit": "unitTemperature"
+            }
+          }
+        ]
+      },
+      "target": {
+        "name": "log",
+        "active": true
+      }
+    }
+  },
+  "parameter": {
+
+  },
+  "modules": [
+
+  ]
+}

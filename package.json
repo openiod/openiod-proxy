@@ -1,0 +1,16 @@
+{
+  "name": "openiod-proxy",
+  "version": "0.0.1",
+  "description": "OpenIoD proxy for REST services ",
+  "main": "openiod-proxy-server",
+  "scripts": {
+    "test": "node openiod-proxy config=./example/openiod-proxy-config/3000/openiod-proxy-config-test.json"
+  },
+  "author": "André van der Wiel <awiel@scapeler.com> (http://scapeler.com/)",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.10.0"
+  }
+}
