@@ -41,6 +41,7 @@
 		systemBaseCode,
 		systemCode,
 		systemConfigLocalPath,
+		systemHooksPath,
 		systemConfigStr,
 		systemConfig,
 		systemContext,
@@ -126,6 +127,7 @@
 					if (!isNaN(parseFloat(_port)) && isFinite(_port)) {
 						// _port is numeric
 						systemListenPort = parseFloat(_port) // port from config path (last folder) overrules default
+						systemHooksPath = argv.configPath.substr(0,argv.configPath.length-1-configPathFolders[configPathFolders.length-1].length)
 					}
 				}
 				console.log('=================================================================');
@@ -137,6 +139,7 @@
 				console.log(' System folder           : ' + systemFolder);
 				console.log(' System folder parent    : ' + systemFolderParent);
 				console.log(' System config folder    : ' + systemConfigLocalPath);
+				console.log(' System hooks  folder    : ' + systemHooksPath);
 				console.log(' System Main modulename  : ' + systemMainModuleName);
 				console.log(' Runtime command         : ' + argv.command);
 				console.log(' Service                 : ' + argv.serviceName);
@@ -204,6 +207,9 @@
 
 			getConfigLocalPath: function () {
 				return systemConfigLocalPath;
+			},
+			getSystemHooksPath: function () {
+				return systemHooksPath;
 			},
 
 			getConfigService: function (serviceName) {

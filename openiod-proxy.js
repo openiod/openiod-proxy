@@ -51,7 +51,11 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const fs = require('fs');
-
+//const codegen = require('swagger-node-codegen');
+const swagger2 = require('./swagger2');
+const _ = require('lodash');
+const os = require('os');
+const randomName = require('project-name-generator');
 /**
 * Configurations of logger.
 */
@@ -100,6 +104,64 @@ if (process.env.NODE_ENV !== 'production') {
   }));
 }
 /** end of logger configuration */
+
+/** OpenAPI code generator
+*
+*/
+
+/*
+codegen.generate({
+  swagger: path.resolve(__dirname, './swagger.yml'),
+  target_dir: path.resolve(__dirname, './my-api')
+}).then(() => {
+  console.log('Done!');
+}).catch(err => {
+  console.error(`Something went wrong: ${err.message}`);
+});
+*/
+var config={
+  swagger: path.resolve(__dirname, './swagger.yml'),
+  target_dir: path.resolve(__dirname, './my-api')
+}
+/**
+ * Generates a code skeleton for an API given an OpenAPI/Swagger file.
+ *
+ * @module codegen.generate
+ * @param  {Object}        config Configuration options
+ * @param  {Object|String} config.swagger OpenAPI/Swagger JSON or a string pointing to an OpenAPI/Swagger file.
+ * @param  {String}        config.target_dir Path to the directory where the files will be generated.
+ * @return {Promise}
+ */
+var generate = config => new Promise((resolve, reject) => {
+  if (config.handlebars_helper) {
+    let handlebarsExt = require(config.handlebars_helper);
+    handlebarsExt(Handlebars);
+  }
+  swagger2(config.swagger).then(swagger => {
+      const random_name = randomName().dashed;
+      config.swagger = swagger;
+      _.defaultsDeep(config, {
+        swagger: {
+          info: {
+            title: random_name
+          }
+        },
+        package: {
+          name: _.kebabCase(_.result(config, 'swagger.info.title', random_name))
+        },
+        target_dir: path.resolve(os.tmpdir(), 'swagger-node-generated-code'),
+        templates: path.resolve(__dirname, '../templates/express-server')
+      });
+      console.dir(config)
+
+      //generateDirectoryStructure(config).then(resolve).catch(reject);
+    }).catch(reject);
+});
+generate(config)
+/** end of OpenAPI code generator */
+
+
+
 
 var _systemCode = openIoDConfig.getSystemCode();
 var _systemFolderParent	= openIoDConfig.getSystemFolderParent();
@@ -153,7 +215,13 @@ var errorMessages = {
 
 var _service;
 
+var routes = require(openIoDConfig.getSystemHooksPath()+'/routes.js')
+console.dir(routes)
+console.dir(routes.routes[0].controller)
+
 var initRoutes = function(){
+  app.all('/*',routes.routes[0].controller)
+
 	app.all('/*', function(req, res, next) {
 		console.log("app.all/: " + req.url + " ; systemCode: " + openIoDConfig.getSystemCode() );
 //    console.dir(req)
